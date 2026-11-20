@@ -3009,3 +3009,209 @@ a {
   }
 }
 
+
+/* ---------- Contact page ---------- */
+.syn-contact-grid {
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: 40px;
+  align-items: start;
+}
+.syn-contact-info {
+  display: grid;
+  gap: 1px;
+  border: 1px solid var(--syn-line);
+  background: var(--syn-line);
+}
+.syn-contact-card {
+  display: flex;
+  gap: 16px;
+  padding: 24px;
+  background: var(--syn-panel);
+}
+.syn-contact-card i {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(255, 45, 45, 0.4);
+  color: var(--syn-red);
+}
+.syn-contact-card h3 {
+  margin: 0 0 6px;
+  color: var(--syn-white);
+  font:
+    600 11px/1 "IBM Plex Mono",
+    monospace;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.syn-contact-card p {
+  margin: 0;
+  color: var(--syn-muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+.syn-contact-card--accent {
+  box-shadow: inset 3px 0 0 var(--syn-red);
+}
+.syn-form {
+  padding: 36px;
+  border: 1px solid var(--syn-line);
+  background: var(--syn-panel);
+}
+.syn-form form {
+  display: grid;
+  gap: 24px;
+}
+.syn-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.syn-field {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+.syn-field--full {
+  grid-column: 1 / -1;
+}
+.syn-field label {
+  color: var(--syn-text);
+  font:
+    500 11px/1 "IBM Plex Mono",
+    monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.syn-field label em {
+  color: var(--syn-red);
+  font-style: normal;
+}
+.syn-field input,
+.syn-field select,
+.syn-field textarea {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0;
+  background: var(--syn-panel-alt);
+  color: var(--syn-white);
+  font: 400 15px/1.4 "IBM Plex Sans", Arial, sans-serif;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.syn-field textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+.syn-field select {
+  appearance: none;
+  padding-right: 40px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23ff2d2d' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+.syn-field select option {
+  background: var(--syn-panel);
+  color: var(--syn-white);
+}
+.syn-field input::placeholder,
+.syn-field textarea::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+.syn-field input:hover,
+.syn-field select:hover,
+.syn-field textarea:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.syn-field input:focus,
+.syn-field select:focus,
+.syn-field textarea:focus {
+  outline: none;
+  border-color: var(--syn-red);
+  box-shadow: 0 0 0 3px rgba(255, 45, 45, 0.18);
+}
+.syn-form .syn-button {
+  justify-self: start;
+  cursor: pointer;
+}
+.syn-form .syn-button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+  transform: none;
+}
+.syn-form-note {
+  margin: -8px 0 0;
+  color: var(--syn-muted);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.syn-form-error {
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 45, 45, 0.5);
+  background: rgba(255, 45, 45, 0.08);
+  color: #ffb4b4;
+  font-size: 14px;
+}
+.syn-form-success {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  padding: 40px 12px;
+  text-align: center;
+}
+.syn-form-success i {
+  color: var(--syn-red);
+}
+.syn-form-success h3 {
+  margin: 0;
+  color: var(--syn-white);
+  font:
+    700 30px/1.1 "Barlow Condensed",
+    sans-serif;
+  text-transform: uppercase;
+}
+.syn-form-success p {
+  max-width: 44ch;
+  margin: 0;
+  color: var(--syn-muted);
+  line-height: 1.6;
+}
+.syn-form-success button {
+  margin-top: 8px;
+  padding: 12px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: transparent;
+  color: var(--syn-white);
+  font:
+    700 12px/1 "Barlow Condensed",
+    sans-serif;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.syn-form-success button:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 900px) {
+  .syn-contact-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 560px) {
+  .syn-form {
+    padding: 22px 18px;
+  }
+  .syn-form-grid {
+    grid-template-columns: 1fr;
+  }
+  .syn-form .syn-button {
+    justify-self: stretch;
+  }
+}
