@@ -1,0 +1,43 @@
+# ---------- BUILD STAGE ----------
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+ARG NEXT_PUBLIC_WORDPRESS_API_URL
+ENV NEXT_PUBLIC_WORDPRESS_API_URL=$NEXT_PUBLIC_WORDPRESS_API_URL
+ARG NEXT_PUBLIC_POSTHOG_KEY
+ENV NEXT_PUBLIC_POSTHOG_KEY=$NEXT_PUBLIC_POSTHOG_KEY
+ARG NEXT_PUBLIC_POSTHOG_HOST
+ENV NEXT_PUBLIC_POSTHOG_HOST=$NEXT_PUBLIC_POSTHOG_HOST
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+# ---------- 2. PRODUCTION STAGE ----------
+FROM node:20-alpine
+
+WORKDIR /app
+
+ENV NODE_ENV=production
+
+# copier uniquement le nécessaire
+COPY --from=builder /app/package*.json ./
+RUN npm install --omit=dev
+
+COPY --from=builder /app/.next .next
+COPY --from=builder /app/public public
+COPY --from=builder /app/next.config.js ./
+
+ARG NEXT_PUBLIC_WORDPRESS_API_URL
+ENV NEXT_PUBLIC_WORDPRESS_API_URL=$NEXT_PUBLIC_WORDPRESS_API_URL
+ARG NEXT_PUBLIC_POSTHOG_KEY
+ENV NEXT_PUBLIC_POSTHOG_KEY=$NEXT_PUBLIC_POSTHOG_KEY
+ARG NEXT_PUBLIC_POSTHOG_HOST
+ENV NEXT_PUBLIC_POSTHOG_HOST=$NEXT_PUBLIC_POSTHOG_HOST
+
+EXPOSE 3000
+
+CMD ["npm", "start"]

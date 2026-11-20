@@ -1,0 +1,18 @@
+<clickhouse>
+    <remote_servers>
+        <posthog_migrations>
+            <shard>
+                <replica>
+                    <host>posthog-clickhouse</host>
+                    <port>9000</port>
+                </replica>
+            </shard>
+        </posthog_migrations>
+    </remote_servers>
+  <macros>
+      <shard>01</shard>
+      <replica>01</replica>
+      <hostClusterType>online</hostClusterType>
+      <hostClusterRole>data</hostClusterRole>
+  </macros>
+</clickhouse>
