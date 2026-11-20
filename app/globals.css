@@ -122,9 +122,7 @@ a {
   animation: syn-menu-in 0.18s ease-out both;
 }
 
-.syn-portfolio-menu:hover > .syn-portfolio-popover,
-.syn-portfolio-menu > button:focus-visible + .syn-portfolio-popover,
-.syn-portfolio-popover:focus-within,
+.syn-portfolio-menu:has(:focus-visible) > .syn-portfolio-popover,
 .syn-portfolio-popover.is-open {
   display: grid;
 }
@@ -1036,9 +1034,7 @@ a {
     width: 100%;
     box-shadow: none;
   }
-  .syn-portfolio-menu:hover > .syn-portfolio-popover,
-  .syn-portfolio-menu > button:focus-visible + .syn-portfolio-popover,
-  .syn-portfolio-popover:focus-within,
+  .syn-portfolio-menu:has(:focus-visible) > .syn-portfolio-popover,
   .syn-portfolio-popover.is-open {
     display: block;
   }
