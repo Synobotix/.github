@@ -1,0 +1,41 @@
+User-agent: *
+Allow: /
+Disallow: /cms/
+Disallow: /api/
+
+# Bloquer l'indexation du WordPress /cms/ pour protéger le SEO
+User-agent: Googlebot
+Disallow: /cms/
+Disallow: /api/
+
+User-agent: Bingbot
+Disallow: /cms/
+Disallow: /api/
+
+# AI Crawlers - Contrôle
+User-agent: GPTBot
+Disallow: /admin/
+Disallow: /api/
+Allow: /
+
+User-agent: ClaudeBot
+Disallow: /admin/
+Disallow: /api/
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Disallow: /admin/
+
+User-agent: Applebot-Extended
+Disallow: /admin/
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+Sitemap: https://synobotix.com/sitemap.xml

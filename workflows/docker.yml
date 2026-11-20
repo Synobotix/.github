@@ -1,0 +1,84 @@
+name: Build & Push Docker Images
+
+# Build once, promote to prod — no more separate staging/prod images. Backend never had
+# per-environment build args, and frontend's backend URL is now injected at container start
+# (see frontend/inject-config.sh) instead of baked into the bundle by Vite, so the exact same
+# built image is deployable to both staging and prod; see synobotix/{staging,prod}/site.conf
+# (IMAGE_PREFIX=synobotix) and /srv/platform/scripts/deploy.sh.
+#
+# Staging and prod stay decoupled on *when* they deploy, just not on *what*:
+#   - every push to main builds the image once and redeploys staging with it (continuous).
+#   - a "vX.Y.Z" tag deploys prod with the already-built image for the commit that tag points
+#     at — no rebuild. Cut a release tag only from a commit that has already been built (i.e.
+#     already pushed to main and deployed to staging), or there's nothing for prod to pull.
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+
+env:
+  REGISTRY: 57.129.143.234.nip.io
+
+jobs:
+  # --- build once, on every push to main -----------------------------------
+
+  build:
+    if: github.ref_type == 'branch'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Login to registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build & push backend
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/synobotix:${{ github.sha }}
+            ${{ env.REGISTRY }}/synobotix:latest
+
+  deploy-staging:
+    needs: build
+    if: github.ref_type == 'branch'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy staging to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: bash /srv/platform/scripts/deploy.sh synobotix/staging "${{ github.sha }}"
+
+  # --- prod: promote an already-built commit on a "vX.Y.Z" tag -------------
+
+  deploy-prod:
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy prod to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          # github.sha here is the commit the tag points at, i.e. the exact commit whose image
+          # `build` already produced during its own push-to-main run — deploy.sh just pulls it.
+          script: bash /srv/platform/scripts/deploy.sh synobotix/prod "${{ github.sha }}"
